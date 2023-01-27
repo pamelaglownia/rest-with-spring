@@ -13,7 +13,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.2</version>
+		<version>2.7.7</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -105,7 +105,6 @@
 		<guava.version>27.0-jre</guava.version>
 		<commons-lang3.version>3.8.1</commons-lang3.version>		
 		 
-		<rest-assured.version>4.3.3</rest-assured.version>
 		<groovy.version>3.0.6</groovy.version>
 
 		<cargo-maven2-plugin.version>1.7.16</cargo-maven2-plugin.version>
@@ -115,7 +114,6 @@
 		<module>common-client</module>
 		<module>common</module>
 		<module>common-test</module>
-
 		<module>um-client</module>
 		<module>um-webapp</module>
 	</modules>
