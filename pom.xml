@@ -15,6 +15,8 @@
         <module>end-to-end-api-tests-webtestclient-end</module>
         <module>webtestclient-api-assertions-start</module>
         <module>webtestclient-api-assertions-end</module>
+        <module>contract-testing-start</module>
+        <module>contract-testing-end</module>
     </modules>
     
 </project>
