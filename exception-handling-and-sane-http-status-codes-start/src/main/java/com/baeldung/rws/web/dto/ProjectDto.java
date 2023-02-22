@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.baeldung.rws.domain.model.Project;
 
-public record ProjectDto ( // @formatter:off
+public record ProjectDto( // @formatter:off
 
     Long id,
 

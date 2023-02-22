@@ -11,8 +11,8 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>http-status-codes-and-exception-handing-start</module>
-        <module>http-status-codes-and-exception-handing-end</module>
+        <module>exception-handling-and-sane-http-status-codes-start</module>
+        <module>exception-handling-and-sane-http-status-codes-end</module>
         <module>the-basics-of-input-validation-start</module>
         <module>the-basics-of-input-validation-end</module>
         <module>validation-groups-for-different-api-operations-start</module>

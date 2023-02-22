@@ -9,7 +9,7 @@ import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.domain.model.Task;
 import com.baeldung.rws.domain.model.TaskStatus;
 
-public record TaskDto ( // @formatter:off
+public record TaskDto( // @formatter:off
     Long id,
 
     String uuid,
@@ -18,8 +18,7 @@ public record TaskDto ( // @formatter:off
 
     String description,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    LocalDate dueDate,
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dueDate,
 
     TaskStatus status,
 

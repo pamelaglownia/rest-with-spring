@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <description>REST with Spring - Exception Handling and Sane HTTP Status Codes - End</description>
+    <description>REST with Spring - Exception Handling and Sane HTTP Status Codes - Start</description>
 
     <groupId>com.baeldung</groupId>
-    <artifactId>http-status-codes-and-exception-handing-end</artifactId>
+    <artifactId>exception-handling-and-sane-http-status-codes-start</artifactId>
     <version>2.0.0</version>
     <packaging>jar</packaging>
 
@@ -45,6 +45,7 @@
             <scope>test</scope>
         </dependency>
 
+
     </dependencies>
 
     <build>
@@ -73,10 +74,12 @@
         </license>
     </licenses>
 
+
     <properties>
         <!-- non-dependencies -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>17</java.version>
+
     </properties>
 
     <parent>
@@ -85,6 +88,5 @@
         <version>3.0.1</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
-
 
 </project>
