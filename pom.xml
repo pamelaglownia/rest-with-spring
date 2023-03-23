@@ -13,5 +13,6 @@
 
     <modules>
         <module>web-configuration</module>
+        <module>the-project-we-are-building</module>
     </modules>
 </project>
