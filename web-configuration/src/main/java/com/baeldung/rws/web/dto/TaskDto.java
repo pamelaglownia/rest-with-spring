@@ -29,7 +29,9 @@ public record TaskDto ( // @formatter:off
 
     public static class Mapper {
         public static Task toModel(TaskDto dto) {
-            // we won't allow creating or modifying Projects via a Task
+            if(dto == null)
+                return null;
+
             Project project = new Project();
             project.setId(dto.projectId());
 
@@ -37,10 +39,14 @@ public record TaskDto ( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
+
+            // we won't allow creating or modifying Projects via a Task
             return model;
         }
 
         public static TaskDto toDto(Task model) {
+            if(model == null)
+                return null;
             TaskDto dto = new TaskDto(model.getId(), model.getUuid(), model.getName(), model.getDescription(), model.getDueDate(), model.getStatus(), model.getProject()
                 .getId(), WorkerDto.Mapper.toDto(model.getAssignee()));
             return dto;
