@@ -3,8 +3,6 @@ package com.baeldung.rws.web.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.domain.model.Task;
 import com.baeldung.rws.domain.model.TaskStatus;
@@ -18,7 +16,6 @@ public record TaskDto ( // @formatter:off
 
     String description,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     LocalDate dueDate,
 
     TaskStatus status,
