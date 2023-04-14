@@ -2,14 +2,13 @@ package com.baeldung.rws.web.dto;
 
 import java.util.Objects;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.groups.Default;
-
 import com.baeldung.rws.domain.model.Worker;
 import com.baeldung.rws.web.dto.TaskDto.TaskUpdateAssigneeValidationData;
 import com.baeldung.rws.web.dto.TaskDto.TaskUpdateValidationData;
+
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record WorkerDto( // @formatter:off
 
@@ -17,10 +16,8 @@ public record WorkerDto( // @formatter:off
       message = "Worker id can't be null")
     Long id,
 
-    @NotBlank(groups = { WorkerUpdateValidationData.class, Default.class },
-      message = "email can't be blank")
-    @Email(groups = { WorkerUpdateValidationData.class, Default.class },
-      message = "You must provide a valid email address")
+    @NotBlank(message = "email can't be blank")
+    @Email(message = "You must provide a valid email address")
     String email,
 
     String firstName,

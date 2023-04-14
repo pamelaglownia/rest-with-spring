@@ -10,9 +10,8 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.groups.ConvertGroup;
 import jakarta.validation.groups.Default;
-
-import org.springframework.format.annotation.DateTimeFormat;
 
 import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.domain.model.Task;
@@ -32,7 +31,6 @@ public record TaskDto( // @formatter:off
       message = "description must be between 10 and 50 characters long")
     String description,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Future(message = "dueDate must be in the future")
     LocalDate dueDate,
 
@@ -45,6 +43,7 @@ public record TaskDto( // @formatter:off
     Long projectId,
 
     @Valid
+    @ConvertGroup(from = Default.class, to = WorkerOnTaskCreateValidationData.class)
     WorkerDto assignee,
 
     @Min(groups = { TaskUpdateValidationData.class, Default.class },
@@ -57,7 +56,9 @@ public record TaskDto( // @formatter:off
 
     public static class Mapper {
         public static Task toModel(TaskDto dto) {
-            // we won't allow creating or modifying Projects via a Task
+            if(dto == null)
+                return null;
+
             Project project = new Project();
             project.setId(dto.projectId());
 
@@ -65,10 +66,14 @@ public record TaskDto( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
+
+            // we won't allow creating or modifying Projects via a Task
             return model;
         }
 
         public static TaskDto toDto(Task model) {
+            if(model == null)
+                return null;
             TaskDto dto = new TaskDto(model.getId(), model.getUuid(), model.getName(), model.getDescription(), model.getDueDate(), model.getStatus(), model.getProject()
                 .getId(), WorkerDto.Mapper.toDto(model.getAssignee()), model.getEstimatedHours());
             return dto;
@@ -82,5 +87,8 @@ public record TaskDto( // @formatter:off
     }
 
     public interface TaskUpdateAssigneeValidationData {
+    }
+
+    public interface WorkerOnTaskCreateValidationData {
     }
 }

@@ -20,15 +20,20 @@ public record ProjectDto( // @formatter:off
 
     public static class Mapper {
         public static Project toModel(ProjectDto dto) {
-            // we won't allow creating or modifying Tasks via the Project
+            if(dto == null)
+                return null;
+
             Project model = new Project(dto.code(), dto.name(), dto.description());
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
+            // we won't allow creating or modifying Projects via a Task
             return model;
         }
 
         public static ProjectDto toDto(Project model) {
+            if(model == null)
+                return null;
             Set<TaskDto> tasks = model.getTasks()
                 .stream()
                 .map(TaskDto.Mapper::toDto)
