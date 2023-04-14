@@ -21,6 +21,10 @@
         <module>http-verbs-and-semantics-with-spring-end</module>
         <module>leverage-http-in-rest-operations-start</module>
         <module>leverage-http-in-rest-operations-end</module>
+        <module>spring-and-problem-details-spec-start</module>
+        <module>spring-and-problem-details-spec-end</module>
+        <module>global-api-exception-handling-start</module>
+        <module>global-api-exception-handling-end</module>
     </modules>
     
 </project>
