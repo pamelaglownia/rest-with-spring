@@ -9,7 +9,7 @@ import com.baeldung.rws.domain.model.Worker;
 
 public interface TaskService {
 
-    List<Task> searchTasks(Optional<String> nameSubstring, Optional<Long> assigneeId);
+    List<Task> searchTasks(String nameSubstring, Long assigneeId);
 
     Optional<Task> findById(Long id);
 

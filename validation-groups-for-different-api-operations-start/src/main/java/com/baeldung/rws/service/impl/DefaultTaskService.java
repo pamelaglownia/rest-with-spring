@@ -20,8 +20,8 @@ public class DefaultTaskService implements TaskService {
     }
 
     @Override
-    public List<Task> searchTasks(Optional<String> nameSubstring, Optional<Long> assigneeId) {
-        return taskRepository.findByNameContainingAndAssigneeId(nameSubstring.orElse(""), assigneeId.orElse(null));
+    public List<Task> searchTasks(String nameSubstring, Long assigneeId) {
+        return taskRepository.findByNameContainingAndAssigneeId(nameSubstring != null ? nameSubstring : "", assigneeId);
     }
 
     @Override

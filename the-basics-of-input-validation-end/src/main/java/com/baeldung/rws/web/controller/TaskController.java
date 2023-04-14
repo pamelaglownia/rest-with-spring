@@ -34,7 +34,7 @@ public class TaskController {
     }
 
     @GetMapping
-    public List<TaskDto> searchTasks(@RequestParam Optional<String> name, @RequestParam Optional<Long> assigneeId) {
+    public List<TaskDto> searchTasks(@RequestParam(required = false) String name, @RequestParam(required = false) Long assigneeId) {
         List<Task> models = taskService.searchTasks(name, assigneeId);
         List<TaskDto> taskDtos = models.stream()
             .map(TaskDto.Mapper::toDto)
