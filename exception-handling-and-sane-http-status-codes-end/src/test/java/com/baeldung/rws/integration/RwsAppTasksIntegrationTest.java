@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.baeldung.rws.domain.model.TaskStatus;
@@ -384,7 +387,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(updatedTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is5xxServerError()
+            .is4xxClientError()
             .expectBody()
             .jsonPath("$.error")
             .isNotEmpty();
@@ -461,7 +464,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(updatedTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is5xxServerError();
+            .is4xxClientError();
     }
 
     @Test
@@ -610,6 +613,134 @@ public class RwsAppTasksIntegrationTest {
             .isNotEmpty()
             .jsonPath("$.assignee.email")
             .isNotEmpty();
+    }
+
+    // Lesson test cases
+
+    @Test
+    void whenGetNonExistingTask_then404WithErrorResponseFields() {
+        webClient.get()
+            .uri("/tasks/99")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(404)
+            .jsonPath("$.message")
+            .isEqualTo("Couldn't find the requested Task")
+            .jsonPath("$.exception")
+            .exists()
+            .jsonPath("$.trace")
+            .exists()
+            .jsonPath("$.error")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
+    void whenGetNonExistingEndpoint_then404WithErrorResponseFields() {
+        webClient.get()
+            .uri("/other")
+            .exchange()
+            .expectStatus()
+            .isNotFound()
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(404)
+            .jsonPath("$.error")
+            .isEqualTo("Not Found");
+    }
+
+    @Test
+    void whenInvalidMethod_then405WithAllowHeader() {
+        webClient.put()
+            .uri("/tasks")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
+            .expectHeader()
+            .exists(HttpHeaders.ALLOW)
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(405)
+            .jsonPath("$.message")
+            .isEqualTo("Method 'PUT' is not supported.")
+            .jsonPath("$.exception")
+            .exists()
+            .jsonPath("$.trace")
+            .exists()
+            .jsonPath("$.error")
+            .isEqualTo("Method Not Allowed");
+    }
+
+    @Test
+    void whenInvalidContentType_then415WithAcceptHeader() {
+        webClient.post()
+            .uri("/tasks")
+            .contentType(MediaType.APPLICATION_XML)
+            .bodyValue("{ \"name\": \"Invalid Content-Type\", \"projectId\": 1 }")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
+            .expectHeader()
+            .exists(HttpHeaders.ACCEPT)
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(415)
+            .jsonPath("$.message")
+            .exists()
+            .jsonPath("$.exception")
+            .exists()
+            .jsonPath("$.trace")
+            .exists()
+            .jsonPath("$.error")
+            .isEqualTo("Unsupported Media Type");
+    }
+
+    @Test
+    void whenPutInvalidTask_then400WithErrorResponseFields() {
+        TaskDto updatedToNonExistingProject = new TaskDto(null, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), null, 99L, null);
+
+        webClient.put()
+            .uri("/tasks/1")
+            .body(Mono.just(updatedToNonExistingProject), TaskDto.class)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(400)
+            .jsonPath("$.message")
+            .isEqualTo("Associated entity not found: Unable to find com.baeldung.rws.domain.model.Project with id 99")
+            .jsonPath("$.exception")
+            .exists()
+            .jsonPath("$.trace")
+            .exists()
+            .jsonPath("$.error")
+            .isEqualTo("Bad Request");
+    }
+
+    @Test
+    void whenPutInvalidTask2_then400WithErrorResponseFields() {
+        TaskDto updatedToNonExistingWorker = new TaskDto(null, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), null, 1L, new WorkerDto(99L, null, null, null));
+
+        webClient.put()
+            .uri("/tasks/1")
+            .body(Mono.just(updatedToNonExistingWorker), TaskDto.class)
+            .exchange()
+            .expectStatus()
+            .isBadRequest()
+            .expectBody()
+            .jsonPath("$.status")
+            .isEqualTo(400)
+            .jsonPath("$.message")
+            .isEqualTo("Associated entity not found: Unable to find com.baeldung.rws.domain.model.Worker with id 99")
+            .jsonPath("$.exception")
+            .exists()
+            .jsonPath("$.trace")
+            .exists()
+            .jsonPath("$.error")
+            .isEqualTo("Bad Request");
     }
 
 }
