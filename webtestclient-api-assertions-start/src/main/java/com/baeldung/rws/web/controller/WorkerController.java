@@ -15,7 +15,9 @@ import org.springframework.web.server.ResponseStatusException;
 import com.baeldung.rws.domain.model.Worker;
 import com.baeldung.rws.service.WorkerService;
 import com.baeldung.rws.web.dto.WorkerDto;
-import com.baeldung.rws.web.dto.WorkerDto.WorkerCreateValidationData;
+import com.baeldung.rws.web.dto.WorkerDto.WorkerUpdateValidationData;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/workers")
@@ -37,14 +39,14 @@ public class WorkerController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public WorkerDto create(@RequestBody @Validated(WorkerCreateValidationData.class) WorkerDto newWorker) {
+    public WorkerDto create(@RequestBody @Valid WorkerDto newWorker) {
         Worker model = WorkerDto.Mapper.toModel(newWorker);
         Worker createdModel = this.workerService.save(model);
         return WorkerDto.Mapper.toDto(createdModel);
     }
 
     @PutMapping(value = "/{id}")
-    public WorkerDto update(@PathVariable Long id, @RequestBody WorkerDto updatedWorker) {
+    public WorkerDto update(@PathVariable Long id, @RequestBody @Validated(WorkerUpdateValidationData.class) WorkerDto updatedWorker) {
         Worker model = WorkerDto.Mapper.toModel(updatedWorker);
         Worker createdModel = this.workerService.updateWorker(id, model)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

@@ -3,40 +3,39 @@ package com.baeldung.rws.web.dto;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.groups.Default;
-
-import org.springframework.format.annotation.DateTimeFormat;
-
 import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.domain.model.Task;
 import com.baeldung.rws.domain.model.TaskStatus;
 
-public record TaskDto ( // @formatter:off
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.groups.ConvertGroup;
+import jakarta.validation.groups.Default;
+
+public record TaskDto( // @formatter:off
     Long id,
 
     String uuid,
 
-    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class })
+    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class }, message = "name can't be blank")
     String name,
 
+    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class }, message = "name can't be blank")
     String description,
 
-    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    @Future(message = "dueDate must be in the future")
     LocalDate dueDate,
 
-    @NotNull(groups = { TaskUpdateStatusValidationData.class, TaskUpdateValidationData.class })
+    @NotNull(groups = { TaskUpdateStatusValidationData.class, TaskUpdateValidationData.class }, message = "status can't be null")
     TaskStatus status,
 
-    @NotNull(groups = { TaskUpdateValidationData.class, Default.class })
-    @Positive(groups = { TaskUpdateValidationData.class, Default.class })
+    @NotNull(groups = { TaskUpdateValidationData.class, Default.class }, message = "projectId can't be null")
     Long projectId,
 
-    @NotNull(groups = { TaskUpdateAssigneeValidationData.class })
     @Valid
+    @ConvertGroup(from = Default.class, to = WorkerOnTaskCreateValidationData.class)
     WorkerDto assignee) { // @formatter:on
 
     public static class Mapper {
@@ -51,7 +50,7 @@ public record TaskDto ( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
-            
+
             // we won't allow creating or modifying Projects via a Task
             return model;
         }
@@ -72,5 +71,8 @@ public record TaskDto ( // @formatter:off
     }
 
     public static interface TaskUpdateAssigneeValidationData {
+    }
+
+    public static interface WorkerOnTaskCreateValidationData {
     }
 }

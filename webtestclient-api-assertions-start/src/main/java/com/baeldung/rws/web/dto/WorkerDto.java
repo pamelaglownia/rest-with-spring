@@ -2,23 +2,22 @@ package com.baeldung.rws.web.dto;
 
 import java.util.Objects;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-
 import com.baeldung.rws.domain.model.Worker;
 import com.baeldung.rws.web.dto.TaskDto.TaskUpdateAssigneeValidationData;
 import com.baeldung.rws.web.dto.TaskDto.TaskUpdateValidationData;
 
-public record WorkerDto ( // @formatter:off
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-    @NotNull(groups = { TaskUpdateValidationData.class, TaskUpdateAssigneeValidationData.class })
-    @Positive(groups = { TaskUpdateValidationData.class, TaskUpdateAssigneeValidationData.class })
+public record WorkerDto( // @formatter:off
+
+    @NotNull(groups = { TaskUpdateValidationData.class, TaskUpdateAssigneeValidationData.class },
+      message = "Worker id can't be null")
     Long id,
 
-    @NotBlank(groups = { WorkerUpdateValidationData.class, WorkerCreateValidationData.class })
-    @Email(groups = { WorkerUpdateValidationData.class, WorkerCreateValidationData.class })
+    @NotBlank(message = "email can't be blank")
+    @Email(message = "You must provide a valid email address")
     String email,
 
     String firstName,
@@ -33,7 +32,7 @@ public record WorkerDto ( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
-            
+
             return model;
         }
 
@@ -43,9 +42,6 @@ public record WorkerDto ( // @formatter:off
             WorkerDto dto = new WorkerDto(model.getId(), model.getEmail(), model.getFirstName(), model.getLastName());
             return dto;
         }
-    }
-
-    public static interface WorkerCreateValidationData {
     }
 
     public static interface WorkerUpdateValidationData {
