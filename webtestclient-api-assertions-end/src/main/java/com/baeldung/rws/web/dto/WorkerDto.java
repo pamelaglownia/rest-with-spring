@@ -44,6 +44,6 @@ public record WorkerDto( // @formatter:off
         }
     }
 
-    public static interface WorkerUpdateValidationData {
+    public interface WorkerUpdateValidationData {
     }
 }

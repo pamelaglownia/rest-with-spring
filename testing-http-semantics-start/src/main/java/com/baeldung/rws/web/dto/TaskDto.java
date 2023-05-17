@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import jakarta.validation.groups.ConvertGroup;
 import jakarta.validation.groups.Default;
 
@@ -19,19 +20,24 @@ public record TaskDto( // @formatter:off
 
     String uuid,
 
-    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class }, message = "name can't be blank")
+    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class },
+      message = "name can't be blank")
     String name,
 
-    @NotBlank(groups = { TaskUpdateValidationData.class, Default.class }, message = "name can't be blank")
+    @Size(groups = { TaskUpdateValidationData.class, Default.class },
+      min = 10, max = 50,
+      message = "description must be between 10 and 50 characters long")
     String description,
 
     @Future(message = "dueDate must be in the future")
     LocalDate dueDate,
 
-    @NotNull(groups = { TaskUpdateStatusValidationData.class, TaskUpdateValidationData.class }, message = "status can't be null")
+    @NotNull(groups = { TaskUpdateStatusValidationData.class, TaskUpdateValidationData.class },
+      message = "status can't be null")
     TaskStatus status,
 
-    @NotNull(groups = { TaskUpdateValidationData.class, Default.class }, message = "projectId can't be null")
+    @NotNull(groups = { TaskUpdateValidationData.class, Default.class },
+      message = "projectId can't be null")
     Long projectId,
 
     @Valid
@@ -64,15 +70,15 @@ public record TaskDto( // @formatter:off
         }
     }
 
-    public static interface TaskUpdateValidationData {
+    public interface TaskUpdateValidationData {
     }
 
-    public static interface TaskUpdateStatusValidationData {
+    public interface TaskUpdateStatusValidationData {
     }
 
-    public static interface TaskUpdateAssigneeValidationData {
+    public interface TaskUpdateAssigneeValidationData {
     }
 
-    public static interface WorkerOnTaskCreateValidationData {
+    public interface WorkerOnTaskCreateValidationData {
     }
 }

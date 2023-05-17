@@ -21,7 +21,8 @@ public record ProjectDto ( // @formatter:off
       message = "name can't be blank")
     String name,
 
-    @Size(groups = { ProjectUpdateValidationData.class, Default.class }, min = 10, max = 50,
+    @Size(groups = { ProjectUpdateValidationData.class, Default.class },
+      min = 10, max = 50,
       message = "description must be between 10 and 50 characters long")
     String description,
 
@@ -53,7 +54,7 @@ public record ProjectDto ( // @formatter:off
         }
     }
 
-    public static interface ProjectUpdateValidationData {
+    public interface ProjectUpdateValidationData {
     }
 
 }

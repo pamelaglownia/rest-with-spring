@@ -10,7 +10,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import jakarta.validation.groups.Default;
 
-public record ProjectDto ( // @formatter:off
+public record ProjectDto( // @formatter:off
 
     Long id,
 
@@ -21,7 +21,8 @@ public record ProjectDto ( // @formatter:off
       message = "name can't be blank")
     String name,
 
-    @Size(groups = { ProjectUpdateValidationData.class, Default.class }, min = 10, max = 50,
+    @Size(groups = { ProjectUpdateValidationData.class, Default.class },
+      min = 10, max = 50,
       message = "description must be between 10 and 50 characters long")
     String description,
 
@@ -53,7 +54,7 @@ public record ProjectDto ( // @formatter:off
         }
     }
 
-    public static interface ProjectUpdateValidationData {
+    public interface ProjectUpdateValidationData {
     }
 
 }
