@@ -25,6 +25,7 @@
         <module>spring-and-problem-details-spec-end</module>
         <module>global-api-exception-handling-start</module>
         <module>global-api-exception-handling-end</module>
+        <module>the-lifecycle-of-a-request</module>
     </modules>
     
 </project>
