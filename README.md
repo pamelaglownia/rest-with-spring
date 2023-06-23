@@ -1,6 +1,6 @@
-# REST with Spring - Testing the API
+# REST with Spring - Input Validation and Exception Handling
 
-This is the codebase for Module 'Testing the API' of [REST with Spring](http://bit.ly/restwithspring)
+This is the codebase for Module 'Input Validation and Exception Handling' of [REST with Spring](http://bit.ly/restwithspring)
 
 
 ======
