@@ -4,26 +4,16 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.groups.Default;
-
 import com.baeldung.rws.domain.model.Project;
 
 public record ProjectDto( // @formatter:off
 
     Long id,
 
-    @NotBlank(message = "code can't be null")
     String code,
 
-    @NotBlank(groups = { ProjectUpdateValidationData.class, Default.class },
-      message = "name can't be blank")
     String name,
 
-    @Size(groups = { ProjectUpdateValidationData.class, Default.class },
-      min = 10, max = 50,
-      message = "description must be between 10 and 50 characters long")
     String description,
 
     Set<TaskDto> tasks) { // @formatter:on
@@ -37,8 +27,7 @@ public record ProjectDto( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
-
-            // we won't allow creating or modifying Tasks via the Project
+            // we won't allow creating or modifying Projects via a Task
             return model;
         }
 
@@ -53,8 +42,4 @@ public record ProjectDto( // @formatter:off
             return dto;
         }
     }
-
-    public interface ProjectUpdateValidationData {
-    }
-
 }

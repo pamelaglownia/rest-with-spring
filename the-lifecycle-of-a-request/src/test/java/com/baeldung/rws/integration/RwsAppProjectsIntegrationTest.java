@@ -112,7 +112,7 @@ public class RwsAppProjectsIntegrationTest {
     }
 
     @Test
-    void whenCreateNewProjectWithDuplicatedCode_thenClientError() {
+    void whenCreateNewProjectWithDuplicatedCode_thenServerError() {
         ProjectDto newProjectBody = new ProjectDto(null, "TEST-PROJECT-NEW-3", "Test - New Project 3", "Description of new test project 3", null);
 
         webClient.post()
@@ -129,7 +129,7 @@ public class RwsAppProjectsIntegrationTest {
             .body(Mono.just(newDuplicatedCodeProjectBody), ProjectDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError();
+            .is5xxServerError();
     }
 
     @Test
@@ -191,10 +191,8 @@ public class RwsAppProjectsIntegrationTest {
             .expectStatus()
             .isNotFound()
             .expectBody()
-            .jsonPath("$.title")
-            .isNotEmpty()
-            .jsonPath("$.type")
-            .isEqualTo("about:blank");
+            .jsonPath("$.error")
+            .isNotEmpty();
     }
 
     @Test

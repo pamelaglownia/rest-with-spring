@@ -3,21 +3,11 @@ package com.baeldung.rws.web.dto;
 import java.util.Objects;
 
 import com.baeldung.rws.domain.model.Worker;
-import com.baeldung.rws.web.dto.TaskDto.TaskUpdateAssigneeValidationData;
-import com.baeldung.rws.web.dto.TaskDto.TaskUpdateValidationData;
-
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 
 public record WorkerDto( // @formatter:off
 
-    @NotNull(groups = { TaskUpdateValidationData.class, TaskUpdateAssigneeValidationData.class },
-      message = "Worker id can't be null")
     Long id,
 
-    @NotBlank(message = "email can't be blank")
-    @Email(message = "You must provide a valid email address")
     String email,
 
     String firstName,
@@ -32,7 +22,6 @@ public record WorkerDto( // @formatter:off
             if (!Objects.isNull(dto.id())) {
                 model.setId(dto.id());
             }
-
             return model;
         }
 
@@ -44,6 +33,4 @@ public record WorkerDto( // @formatter:off
         }
     }
 
-    public interface WorkerUpdateValidationData {
-    }
 }

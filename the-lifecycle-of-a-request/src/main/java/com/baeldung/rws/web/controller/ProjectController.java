@@ -3,10 +3,7 @@ package com.baeldung.rws.web.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.validation.Valid;
-
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +17,6 @@ import org.springframework.web.server.ResponseStatusException;
 import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.service.ProjectService;
 import com.baeldung.rws.web.dto.ProjectDto;
-import com.baeldung.rws.web.dto.ProjectDto.ProjectUpdateValidationData;
 
 @RestController
 @RequestMapping(value = "/projects")
@@ -51,14 +47,14 @@ public class ProjectController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProjectDto create(@RequestBody @Valid ProjectDto newProject) {
+    public ProjectDto create(@RequestBody ProjectDto newProject) {
         Project model = ProjectDto.Mapper.toModel(newProject);
         Project createdModel = this.projectService.save(model);
         return ProjectDto.Mapper.toDto(createdModel);
     }
 
     @PutMapping(value = "/{id}")
-    public ProjectDto update(@PathVariable Long id, @RequestBody @Validated(ProjectUpdateValidationData.class) ProjectDto updatedProject) {
+    public ProjectDto update(@PathVariable Long id, @RequestBody ProjectDto updatedProject) {
         Project model = ProjectDto.Mapper.toModel(updatedProject);
         Project createdModel = this.projectService.updateProject(id, model)
             .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));

@@ -84,7 +84,7 @@ public class RwsAppWorkersIntegrationTest {
     }
 
     @Test
-    void whenCreateNewWorkerUsingExistingEmail_thenClientError() {
+    void whenCreateNewWorkerUsingExistingEmail_thenServerError() {
         WorkerDto newWorkerBody = new WorkerDto(null, "test3@testemail.com", "Test First Name 3", "Test Last Name 3");
 
         webClient.post()
@@ -104,9 +104,9 @@ public class RwsAppWorkersIntegrationTest {
             .body(Mono.just(newDuplicatedEmailWorkerBody), WorkerDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError()
+            .is5xxServerError()
             .expectBody()
-            .jsonPath("$.type")
+            .jsonPath("$.error")
             .isNotEmpty();
     }
 

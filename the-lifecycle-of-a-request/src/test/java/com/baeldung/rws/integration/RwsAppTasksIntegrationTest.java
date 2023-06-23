@@ -16,9 +16,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.baeldung.rws.domain.model.TaskStatus;
@@ -231,7 +228,7 @@ public class RwsAppTasksIntegrationTest {
     }
 
     @Test
-    void givenPreloadedData_whenCreateNewTaskUsingExistingUuid_thenClientError() {
+    void givenPreloadedData_whenCreateNewTaskUsingExistingUuid_thenServerError() {
         String existingUuid = webClient.get()
             .uri("/tasks/1")
             .exchange()
@@ -249,7 +246,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(newTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError();
+            .is5xxServerError();
     }
 
     @Test
@@ -291,7 +288,7 @@ public class RwsAppTasksIntegrationTest {
     }
 
     @Test
-    void whenCreateNewTaskPointingToNonExistingProject_thenClientError() {
+    void whenCreateNewTaskPointingToNonExistingProject_thenServerError() {
         TaskDto newTaskBody = new TaskDto(null, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), TaskStatus.DONE, 99L, null);
 
         webClient.post()
@@ -299,10 +296,10 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(newTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError()
+            .is5xxServerError()
             .expectBody()
-            .jsonPath("$.message")
-            .doesNotExist();
+            .jsonPath("$.error")
+            .isNotEmpty();
 
         webClient.get()
             .uri("/projects/99")
@@ -312,7 +309,7 @@ public class RwsAppTasksIntegrationTest {
     }
 
     @Test
-    void whenCreateNewTaskPointingToNullProject_thenClientError() {
+    void whenCreateNewTaskPointingToNullProject_thenServerError() {
         TaskDto newTaskBody = new TaskDto(null, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), TaskStatus.DONE, null, null);
 
         webClient.post()
@@ -320,7 +317,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(newTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError();
+            .is5xxServerError();
     }
 
     // PUT - update
@@ -387,10 +384,10 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(updatedTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError()
+            .is5xxServerError()
             .expectBody()
-            .jsonPath("$.instance")
-            .isEqualTo("/tasks/2");
+            .jsonPath("$.error")
+            .isNotEmpty();
 
         webClient.get()
             .uri("/tasks/2")
@@ -413,12 +410,12 @@ public class RwsAppTasksIntegrationTest {
             .expectStatus()
             .isNotFound()
             .expectBody()
-            .jsonPath("$.type")
-            .isEqualTo("about:blank");
+            .jsonPath("$.error")
+            .isNotEmpty();
     }
 
     @Test
-    void whenUpdateTaskWithNewWorker_thenClientError() {
+    void whenUpdateTaskWithNewWorker_thenServerError() {
         TaskDto newTaskBody = new TaskDto(null, null, "Test - Task X5", "Description of task 5", LocalDate.of(2030, 01, 01), null, 1L, null);
 
         Long newId = webClient.post()
@@ -439,7 +436,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(updatedTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError();
+            .is5xxServerError();
     }
 
     @Test
@@ -464,7 +461,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(updatedTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .is4xxClientError();
+            .is5xxServerError();
     }
 
     @Test
@@ -566,7 +563,7 @@ public class RwsAppTasksIntegrationTest {
     }
 
     @Test
-    void givenPreloadedData_whenUpdateStatusWithNullStatus_thenBadRequest() {
+    void givenPreloadedData_whenUpdateStatusWithNullStatus_thenServerError() {
         TaskDto nullStatusTaskBody = new TaskDto(null, null, "Test - Status Task X2", null, null, null, null, null);
 
         webClient.put()
@@ -574,7 +571,7 @@ public class RwsAppTasksIntegrationTest {
             .body(Mono.just(nullStatusTaskBody), TaskDto.class)
             .exchange()
             .expectStatus()
-            .isBadRequest();
+            .is5xxServerError();
     }
 
     // PUT - update assignee
@@ -615,104 +612,4 @@ public class RwsAppTasksIntegrationTest {
             .isNotEmpty();
     }
 
-    // Lesson test cases
-
-    @Test
-    void whenGetNonExistingTask_then404WithErrorResponseFields() {
-        webClient.get()
-            .uri("/tasks/99")
-            .exchange()
-            .expectStatus()
-            .isNotFound()
-            .expectBody()
-            .jsonPath("$.status")
-            .isEqualTo(404)
-            .jsonPath("$.message")
-            .isEqualTo("404 NOT_FOUND")
-            .jsonPath("$.exception")
-            .doesNotExist()
-            .jsonPath("$.instance")
-            .exists();
-    }
-
-    @Test
-    void whenGetNonExistingEndpoint_then404WithErrorResponseFields() {
-        webClient.get()
-            .uri("/other")
-            .exchange()
-            .expectStatus()
-            .isNotFound()
-            .expectBody()
-            .jsonPath("$.status")
-            .isEqualTo(404)
-            .jsonPath("$.error")
-            .isEqualTo("Not Found");
-    }
-
-    @Test
-    void whenInvalidMethod_then405WithAllowHeader() {
-        webClient.put()
-            .uri("/tasks")
-            .exchange()
-            .expectStatus()
-            .isEqualTo(HttpStatus.METHOD_NOT_ALLOWED)
-            .expectHeader()
-            .exists(HttpHeaders.ALLOW)
-            .expectBody()
-            .jsonPath("$.status")
-            .isEqualTo(405)
-            .jsonPath("$.detail")
-            .isEqualTo("Method 'PUT' is not supported.")
-            .jsonPath("$.type")
-            .isEqualTo("about:blank");
-    }
-
-    @Test
-    void whenInvalidContentType_then415WithAcceptHeader() {
-        webClient.post()
-            .uri("/tasks")
-            .contentType(MediaType.APPLICATION_XML)
-            .bodyValue("{ \"name\": \"Invalid Content-Type\", \"projectId\": 1 }")
-            .exchange()
-            .expectStatus()
-            .isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-            .expectHeader()
-            .exists(HttpHeaders.ACCEPT)
-            .expectBody()
-            .jsonPath("$.status")
-            .isEqualTo(415)
-            .jsonPath("$.message")
-            .exists()
-            .jsonPath("$.exception")
-            .doesNotExist()
-            .jsonPath("$.trace")
-            .doesNotExist()
-            .jsonPath("$.detail")
-            .exists()
-            .jsonPath("$.type")
-            .isEqualTo("about:blank");
-    }
-
-    @Test
-    void whenPutInvalidTask_then400WithErrorResponseFields() {
-        TaskDto updatedToNonExistingProject = new TaskDto(null, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), TaskStatus.TO_DO, 99L, null);
-
-        webClient.put()
-            .uri("/tasks/1")
-            .body(Mono.just(updatedToNonExistingProject), TaskDto.class)
-            .exchange()
-            .expectStatus()
-            .isBadRequest()
-            .expectBody()
-            .jsonPath("$.status")
-            .isEqualTo(400)
-            .jsonPath("$.detail")
-            .isEqualTo("Invalid associated entity: Unable to find com.baeldung.rws.domain.model.Project with id 99")
-            .jsonPath("$.title")
-            .exists()
-            .jsonPath("$.type")
-            .exists()
-            .jsonPath("$.type")
-            .isEqualTo("https://example.com/errors/invalid-associated-entity");
-    }
 }

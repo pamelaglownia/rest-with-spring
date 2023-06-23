@@ -46,4 +46,5 @@ public class DefaultProjectService implements ProjectService {
         base.setDescription(updatedProject.getDescription());
         return base;
     }
+
 }
