@@ -11,20 +11,10 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>exception-handling-and-sane-http-status-codes-start</module>
-        <module>exception-handling-and-sane-http-status-codes-end</module>
-        <module>the-basics-of-input-validation-start</module>
-        <module>the-basics-of-input-validation-end</module>
-        <module>validation-groups-for-different-api-operations-start</module>
-        <module>validation-groups-for-different-api-operations-end</module>
         <module>http-verbs-and-semantics-with-spring-start</module>
         <module>http-verbs-and-semantics-with-spring-end</module>
         <module>leverage-http-in-rest-operations-start</module>
         <module>leverage-http-in-rest-operations-end</module>
-        <module>spring-and-problem-details-spec-start</module>
-        <module>spring-and-problem-details-spec-end</module>
-        <module>global-api-exception-handling-start</module>
-        <module>global-api-exception-handling-end</module>
         <module>the-lifecycle-of-a-request</module>
     </modules>
     
