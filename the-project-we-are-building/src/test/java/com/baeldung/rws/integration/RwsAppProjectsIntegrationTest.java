@@ -131,7 +131,7 @@ public class RwsAppProjectsIntegrationTest {
             .expectStatus()
             .is5xxServerError();
     }
-    
+
     @Test
     void whenCreateNewProjectPointingToExistingTasks_thenCreatedWithNoTasks() {
         Set<TaskDto> tasksBody = Set.of(new TaskDto(1L, null, "Test - Task X", "Description of task", LocalDate.of(2030, 01, 01), TaskStatus.DONE, null, null), new TaskDto(2L, "any-uuid", null, null, null, null, null, null));
@@ -194,7 +194,7 @@ public class RwsAppProjectsIntegrationTest {
             .jsonPath("$.error")
             .isNotEmpty();
     }
-    
+
     @Test
     void givenPreloadedData_whenUpdateExistingProjectUsingExistingTask_thenTaskNotSwitchedToProject() {
         // create Task assigning it to Project 1

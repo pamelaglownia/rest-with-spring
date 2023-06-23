@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import com.baeldung.rws.domain.model.Project;
 
-public record ProjectDto ( // @formatter:off
+public record ProjectDto( // @formatter:off
 
     Long id,
 
@@ -20,7 +20,7 @@ public record ProjectDto ( // @formatter:off
 
     public static class Mapper {
         public static Project toModel(ProjectDto dto) {
-            if(dto == null)
+            if (dto == null)
                 return null;
 
             Project model = new Project(dto.code(), dto.name(), dto.description());
@@ -32,7 +32,7 @@ public record ProjectDto ( // @formatter:off
         }
 
         public static ProjectDto toDto(Project model) {
-            if(model == null)
+            if (model == null)
                 return null;
             Set<TaskDto> tasks = model.getTasks()
                 .stream()
