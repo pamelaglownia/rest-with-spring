@@ -1,6 +1,6 @@
-# REST with Spring - Document and Discover the REST API
+# REST with Spring - Testing the API
 
-This is the codebase for Module 'Document and Discover the REST API' of [REST with Spring](http://bit.ly/restwithspring)
+This is the codebase for Module 'Testing the API' of [REST with Spring](http://bit.ly/restwithspring)
 
 
 ======
