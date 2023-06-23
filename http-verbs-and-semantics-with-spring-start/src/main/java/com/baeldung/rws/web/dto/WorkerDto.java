@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import com.baeldung.rws.domain.model.Worker;
 
-public record WorkerDto ( // @formatter:off
+public record WorkerDto( // @formatter:off
 
     Long id,
 

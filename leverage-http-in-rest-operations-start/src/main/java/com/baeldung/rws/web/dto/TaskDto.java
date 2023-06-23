@@ -7,7 +7,7 @@ import com.baeldung.rws.domain.model.Project;
 import com.baeldung.rws.domain.model.Task;
 import com.baeldung.rws.domain.model.TaskStatus;
 
-public record TaskDto ( // @formatter:off
+public record TaskDto( // @formatter:off
     Long id,
 
     String uuid,
@@ -26,7 +26,7 @@ public record TaskDto ( // @formatter:off
 
     public static class Mapper {
         public static Task toModel(TaskDto dto) {
-            if(dto == null)
+            if (dto == null)
                 return null;
 
             Project project = new Project();
@@ -42,7 +42,7 @@ public record TaskDto ( // @formatter:off
         }
 
         public static TaskDto toDto(Task model) {
-            if(model == null)
+            if (model == null)
                 return null;
             TaskDto dto = new TaskDto(model.getId(), model.getUuid(), model.getName(), model.getDescription(), model.getDueDate(), model.getStatus(), model.getProject()
                 .getId(), WorkerDto.Mapper.toDto(model.getAssignee()));
