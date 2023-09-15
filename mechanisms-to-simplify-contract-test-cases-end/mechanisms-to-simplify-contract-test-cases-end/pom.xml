@@ -2,10 +2,10 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <description>REST with Spring - WebTestClient API Assertions - End</description>
+    <description>REST with Spring - Mechanisms to Simplify Contract Test Cases - End</description>
 
     <groupId>com.baeldung</groupId>
-    <artifactId>webtestclient-api-assertions-end</artifactId>
+    <artifactId>mechanisms-to-simplify-contract-test-cases-end</artifactId>
     <version>2.0.0</version>
     <packaging>jar</packaging>
 
@@ -39,13 +39,18 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.baeldung</groupId>
+            <artifactId>mechanisms-to-simplify-contract-test-cases-end--commons-test</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

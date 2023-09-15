@@ -2,13 +2,19 @@ package com.baeldung.rws.endtoend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import com.baeldung.rws.domain.model.TaskStatus;
 import com.baeldung.rws.web.dto.TaskDto;
+
+import reactor.core.publisher.Mono;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TasksEndToEndApiTest {
@@ -47,5 +53,27 @@ public class TasksEndToEndApiTest {
                 assertThat(tasksList).extracting(TaskDto::name)
                     .allSatisfy(name -> assertThat(name).contains("Task"));
             });
+    }
+
+    @Test
+    void whenCreateNewTaskWithoutRequiredProjectObject_thenBadRequest() {
+        // null project
+        TaskDto nullProjectObjectTaskBody = new TaskDto(null, null, "Test - Task 1", "Description of task 1", LocalDate.of(2030, 01, 01), TaskStatus.TO_DO, null, null);
+
+        webClient.post()
+            .uri("/tasks")
+            .bodyValue(nullProjectObjectTaskBody)
+            .exchange()
+            .expectStatus()
+            .isBadRequest();
+    }
+
+    @Test
+    void whenDeleteExistingTask_thenMethodNotAllowedError() {
+        webClient.delete()
+            .uri("/tasks/1")
+            .exchange()
+            .expectStatus()
+            .isEqualTo(HttpStatusCode.valueOf(405));
     }
 }
