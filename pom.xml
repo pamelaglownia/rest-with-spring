@@ -12,5 +12,7 @@
     <packaging>pom</packaging>
 
     <modules>
+        <module>document-the-api-with-swagger-start</module>
+        <module>document-the-api-with-swagger-end</module>
     </modules>
 </project>
